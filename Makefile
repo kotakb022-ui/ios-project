@@ -1,11 +1,11 @@
-#import <substrate.h> #import <UIKit/UIKit.h>
-%ctor { NSLog(@"[Tweak] Библиотека успешно загружена!");
-dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_page(), ^{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Твик активен" 
-                                                    message:@"Инъекция прошла успешно" 
-                                                   delegate:nil 
-                                          cancelButtonTitle:@"ОК" 
-                                          otherButtonTitles:nil];
-    [alert show];
-});
-}
+name: Build iOS Tweak
+on: [push]
+jobs: build: runs-on: ubuntu-latest container: image: joedj/theos:latest steps: - name: Checkout code uses: actions/checkout@v4
+  - name: Compile Tweak
+    run: make package
+    
+  - name: Upload Artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: compiled-tweak
+      path: packages/
